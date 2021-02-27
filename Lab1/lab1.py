@@ -5,8 +5,8 @@ a1 = 3
 a2 = 8
 a3 = 5
 X1 = [random.randrange(1, 21, 1) for i in range(8)]
-X2 = [random.randrange(1, 21, 1) for i in range(8)]
-X3 = [random.randrange(1, 21, 1) for i in range(8)]
+X2 = [random.randrange(1, 21, 1) for j in range(8)]
+X3 = [random.randrange(1, 21, 1) for k in range(8)]
 Y = [a0 + a1 * X1[i] + a2 * X2[i] + a3 * X3[i] for i in range(8)]
 X01 = (max(X1) + min(X1)) / 2
 X02 = (max(X2) + min(X2)) / 2
@@ -22,6 +22,16 @@ Yet = a0 + a1 * X01 + a2 * X02 + a3 * X03
 index = Y.index(min(Y))
 minimal = [X1[index], X2[index], X3[index]]
 
+# завдання до варіанту 116
+Yser = sum(Y) / len(Y)
+Ydif = []
+for i in Y:
+    if i - Yser >= 0:
+        Ydif.append(i)
+
+index2 = Ydif.index(min(Ydif))
+minimal2 = [X1[index2], X2[index2], X3[index2]]
+
 print("N   X1   X2   X3     Y3       XH1    XH2    XH3")
 for i in range(8):
     print(f"{i + 1:^1} |{X1[i]:^4} {X2[i]:^4} {X3[i]:^4} |"
@@ -32,3 +42,6 @@ print(f"dx| {dX1:^4} {dX2:^4} {dX3:^4}|")
 print("Function: y=", a0, "+", a1, "*X1", "+", a2, "*X2", "+", a3, "*X3")
 print("Yет =", Yet)
 print("min(Y):  Y({0}, {1}, {2}) = {3}".format(*minimal, "%.1f" % min(Y)))
+#Вивід результатів додаткового завдання
+print("Y середнє:", Yser)
+print("Вивід додаткового завдання:  Y({0}, {1}, {2}) = {3}".format(*minimal2, "%.1f" % min(Ydif)))
