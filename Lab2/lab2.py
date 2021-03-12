@@ -1,7 +1,7 @@
 import random, math, numpy as np
 
 # Кількість експериментів, межі у і х, додатковий нульовий фактор
-m = 6
+
 y_max = (30 - 130) * 10 # -950
 y_min = (20 - 130) * 10 # -1050
 x_min = [10, 50]
@@ -13,6 +13,9 @@ line2 = [x_min[0], x_max[1]]
 line3 = [x_max[0], x_min[1]]
 line4 = [x_max[0], x_max[1]]
 matrix = [line1, line2, line3, line4]
+# Значення коефіцієнта критерію Романовського при кількості дослідів m за довірчої ймовірності 0.99
+romanovskyi_cr = {6: 2.16, 7: 2.3, 8: 2.43, 9: 2.5, 10: 2.62, 11: 2.7, 12: 2.75,
+                 13: 2.8, 14: 2.85, 15: 2.9, 16: 2.94, 17: 2.97, 18: 3, 19: 3.05, 20: 3.08}
 
 # Функція знаходження середьного значення
 def average(list_y):
@@ -42,7 +45,8 @@ def homogeneity():
         r_uv1 = abs(theta_uv[0] - 1) / sigma
         r_uv2 = abs(theta_uv[1] - 1) / sigma
         r_uv3 = abs(theta_uv[2] - 1) / sigma
-        if (r_uv1 < 2.16) and (r_uv2 < 2.16) and (r_uv3 < 2.16): return False
+        if (r_uv1 < romanovskyi_cr[m]) and (r_uv2 < romanovskyi_cr[m]) \
+                and (r_uv3 < romanovskyi_cr[m]): return False
         else: return True
     def dispertion(list_y):
         average_y = average(list_y)
@@ -52,6 +56,7 @@ def homogeneity():
         return dispertion
 
     # Функції відгуку в точках експерименту
+    m = 6
     y1 = [random.randint(0, 100) + y_min for _ in range(m)]
     y2 = [random.randint(0, 100) + y_min for _ in range(m)]
     y3 = [random.randint(0, 100) + y_min for _ in range(m)]
@@ -61,11 +66,17 @@ def homogeneity():
     # Перевірка однорідності за критерієм Романовського
     error = romanovskyi(dispertion)
 
-    if not error: print("Перевірку закічнено\nДисперсія однорідна\n")
+    if not error:
+        print("Дисперсія однорідна\nОбчислимо коефіцієнти рівняння регресії")
     else:
-        print("Перевірку закінчено\nДисперсія неоднорідна\nПроводимо ще один експеримент\n")
-        homogeneity()
-        exit()
+        if m == 20:
+            print(
+                "Дисперсія неодноріда при кількості дослідів m = 20\nтому ми не можемо перейти до обчислення коефіцієнтів рівняння регресії")
+            exit()
+        else:
+            m += 1
+            homogeneity()
+            exit()
     print("Значення факторів у точках експерименту:")
     for line in matrix:
         print(line)
