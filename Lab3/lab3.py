@@ -7,10 +7,12 @@ def average(list):
         average += element / len(list)
     return average
 
+m = 3
+N = 4
+
 def main():
     global m, N
-    m = 3
-    N = 4
+  
 
     def dispersion(list):
         list_average = average(list)
@@ -35,9 +37,11 @@ def main():
         gt = 0.7679
 
         if gp < gt:
-            return True
+            print("\nЗа критерієм Кохрена дисперсія ОДНОРІДНА\n")
         else:
-            return False
+            print(f"\nЗа критерієм Кохрена дисперсія НЕОДНОРІДНА\nЗбільшимо значення m")
+            m += 1
+            main()
 
     def students_criteria():
         global m, N
@@ -258,12 +262,6 @@ def main():
 
     print("-" * 42 + "\nПеревірка за критерієм Кохрена\n")
 
-    if cochrane_criteria():
-        print("\nЗа критерієм Кохрена дисперсія ОДНОРІДНА\n")
-    else:
-        print(f"\nЗа критерієм Кохрена дисперсія НЕОДНОРІДНА\nЗбільшимо значення m")
-        m += 1
-        main()
 
     # Далі оцінимо значимість коефіцієнтів регресії згідно критерію Стьюдента
 
