@@ -338,4 +338,7 @@ if __name__ == '__main__':
     y_max = 200 + int(sum([x[1] for x in x_range]) / 3)
     y_min = 200 + int(sum([x[0] for x in x_range]) / 3)
 
-    main(8, 3)
+    N = 8
+    M = 3
+    if not main(N, M):
+        main(N*2.3, M*2.3)
