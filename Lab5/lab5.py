@@ -1,4 +1,5 @@
 import random
+import time
 import numpy as np
 import sklearn.linear_model as lm
 from scipy.stats import f, t
@@ -177,9 +178,8 @@ def check(X, Y, B, n, m):
     q = 0.05
 
     ### табличні значення
-    student = partial(t.ppf, q=1 - q)
-    t_student = student(df=f3)
 
+    start_time_kohren = time.perf_counter()
     G_kr = cohren(f1, f2)
     ###
 
@@ -197,6 +197,12 @@ def check(X, Y, B, n, m):
         print("Необхідно збільшити кількість дослідів")
         m += 1
         main(n, m)
+    print(f"Час перевірки однорідності дисперсії за Кохреном: {time.perf_counter() - start_time_kohren}")
+
+    start_time_student = time.perf_counter()
+
+    student = partial(t.ppf, q=1 - q)
+    t_student = student(df=f3)
 
     ts = kriteriy_studenta(X[:, 1:], Y, y_aver, n, m)
     print('\nКритерій Стьюдента:\n', ts)
@@ -213,10 +219,13 @@ def check(X, Y, B, n, m):
     print(y_new)
 
     d = len(res)
+    print(f"Час перевірки значимості коефіцієнтів регресії за Стьюдентом: {time.perf_counter() - start_time_student}")
     if d >= n:
         print('\nF4 <= 0')
         print('')
         return
+
+    start_time_fisher = time.perf_counter()
     f4 = n - d
 
     F_p = kriteriy_fishera(Y, y_aver, y_new, n, m, d)
@@ -230,7 +239,8 @@ def check(X, Y, B, n, m):
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним\nНеобхідно збільшити кількість дослідів')
-
+    print(
+        f"Час перевірки адекватності моделі оригіналу за допомогою критерію Фішера: {time.perf_counter() - start_time_fisher}")
 
 def main(n, m):
     X5, Y5, X5_norm = plan_matrix5(n, m)
